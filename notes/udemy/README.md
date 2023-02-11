@@ -7,4 +7,4 @@
  |- [README.md](./README.md)\
  |- [write_architecture.py](./write_architecture.py)
 
-> Project folder is private.
+> Project folder is confidential.

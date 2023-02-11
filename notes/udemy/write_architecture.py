@@ -12,7 +12,7 @@ with open(path + '/README.md', 'w') as f:
         dir_path = './%s' %dir
         f.write(' |- [%s](%s)' %(dir, dir_path))
         if dir != arr_dir[-1]: f.write('\\\n')
-    f.write('\n\n> Project folder is private.')
+    f.write('\n\n> Project folder is confidential.')
 
 # write .gitignore
 with open(path + '/.gitignore', 'w') as f:
