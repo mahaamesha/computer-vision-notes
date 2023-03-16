@@ -47,7 +47,8 @@ class CameraCalibrator():
 				# draw and display the corners
 				cv.drawChessboardCorners(img, self.PATERN_SIZE, corners2, ret)
 
-			plt.imshow( cv.cvtColor(img, cv.COLOR_BGR2RGB) ); plt.title(fname); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_found.jpg'), dpi=300 )
+		# save the last img
+		plt.imshow( cv.cvtColor(img, cv.COLOR_BGR2RGB) ); plt.title(fname); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_found.jpg'), dpi=300 ); plt.show()
 		
 		# calibrate to get intrinsic & extrinsic properties
 		# mtx, dist are intrinsic | rvecs, tvecs are extrinsic
@@ -121,8 +122,8 @@ class CameraCalibrator():
 		x, y, w, h = roi
 		dst = dst[y:y+h, x:x+w]
 		
-		plt.imshow( cv.cvtColor(img, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_distorted.jpg'), dpi=300 )
-		plt.imshow( cv.cvtColor(dst, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_undistorted.jpg'), dpi=300 )
+		plt.imshow( cv.cvtColor(img, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_distorted.jpg'), dpi=300 ); plt.show()
+		plt.imshow( cv.cvtColor(dst, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_undistorted.jpg'), dpi=300 ); plt.show()
 		
 		return img, dst
 
@@ -134,9 +135,9 @@ class CameraCalibrator():
 		fig, axs = plt.subplots(1, 2, figsize=(12,6))
 		axs[0].imshow( cv.cvtColor(im1, cv.COLOR_BGR2RGB) )
 		axs[1].imshow( cv.cvtColor(im2, cv.COLOR_BGR2RGB) )
-		plt.tight_layout(); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_compare.jpg'), dpi=300 )
+		plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_compare.jpg'), dpi=300 ); plt.show()
 
-		plt.imshow( cv.cvtColor(im_diff, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_absdiff.jpg'), dpi=300 )
+		plt.imshow( cv.cvtColor(im_diff, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_absdiff.jpg'), dpi=300 ); plt.show()
 		return im_diff
 
 	
