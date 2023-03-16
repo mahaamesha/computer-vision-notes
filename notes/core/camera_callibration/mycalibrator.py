@@ -47,7 +47,7 @@ class CameraCalibrator():
 				# draw and display the corners
 				cv.drawChessboardCorners(img, self.PATERN_SIZE, corners2, ret)
 
-				plt.imshow( cv.cvtColor(img, cv.COLOR_BGR2RGB) ); plt.title(fname); plt.show()
+			plt.imshow( cv.cvtColor(img, cv.COLOR_BGR2RGB) ); plt.title(fname); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_found.jpg'), dpi=300 )
 		
 		# calibrate to get intrinsic & extrinsic properties
 		# mtx, dist are intrinsic | rvecs, tvecs are extrinsic
@@ -106,8 +106,8 @@ class CameraCalibrator():
 
 
 	def undistort_image(self, file_path:str="./img/test/left12.jpg", alpha=1):
-		file_path = os.path.join( os.path.abspath(__file__), '../' , file_path )
-		img = cv.imread(file_path)      # test image
+		path = os.path.join( os.path.abspath(__file__), '../' , file_path )
+		img = cv.imread(path)      # test image
 		h,  w = img.shape[:2]
 		
 		# get optimum camera matrix
@@ -121,8 +121,8 @@ class CameraCalibrator():
 		x, y, w, h = roi
 		dst = dst[y:y+h, x:x+w]
 		
-		plt.imshow( cv.cvtColor(img, cv.COLOR_BGR2RGB) ); plt.title('im_distorted.jpg'); plt.show()
-		plt.imshow( cv.cvtColor(dst, cv.COLOR_BGR2RGB) ); plt.title('im_undistorted.jpg'); plt.show()
+		plt.imshow( cv.cvtColor(img, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_distorted.jpg'), dpi=300 )
+		plt.imshow( cv.cvtColor(dst, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_undistorted.jpg'), dpi=300 )
 		
 		return img, dst
 
@@ -134,9 +134,9 @@ class CameraCalibrator():
 		fig, axs = plt.subplots(1, 2, figsize=(12,6))
 		axs[0].imshow( cv.cvtColor(im1, cv.COLOR_BGR2RGB) )
 		axs[1].imshow( cv.cvtColor(im2, cv.COLOR_BGR2RGB) )
-		plt.tight_layout(); plt.show()
+		plt.tight_layout(); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_compare.jpg'), dpi=300 )
 
-		plt.imshow( cv.cvtColor(im_diff, cv.COLOR_BGR2RGB) ); plt.show()
+		plt.imshow( cv.cvtColor(im_diff, cv.COLOR_BGR2RGB) ); plt.savefig( os.path.join(os.path.abspath(__file__), '../img/im_absdiff.jpg'), dpi=300 )
 		return im_diff
 
 	
