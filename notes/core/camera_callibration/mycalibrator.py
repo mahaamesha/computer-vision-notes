@@ -1,3 +1,8 @@
+# 2023, March
+# by @mahaamesha
+# I want to do camera calibration to get intrinsic and extrinsic parameter.
+# Then, I need to undistort test image
+
 import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
