@@ -4,6 +4,8 @@ import mycalibrator as c
 if __name__ == "__main__":
     CamCalib = c.CameraCalibrator(PATERN_SIZE=(8,6), calib_dir='./img/calib_/')
 
+    CamCalib.compress_calib_imgs(isResize=0)
+
     CamCalib.do_camera_calibration()
 
     im1, im2 = CamCalib.do_image_undistortion('./img/test_/left12.jpg', alpha=0)
