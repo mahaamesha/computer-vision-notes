@@ -65,6 +65,53 @@ class CameraCalibrator():
 				print('Done')
 		compress_imgs_inside_dir(self.calib_dir, isResize)
 		compress_imgs_inside_dir(self.test_dir, isResize)
+	
+	
+	# improvement of compress_calib_imgs. See tests/resize/main.py
+	def size_preconditioning(self, file_path, dsize:tuple=(1920,1080)):
+		"""
+		Function to crop image into desired size (default=1920x1080).
+		I assume that the input image has larger size.
+		"""
+		im = cv.imread(file_path, cv.IMREAD_GRAYSCALE)
+		h, w = im.shape[:2]
+
+		# resize
+		resize_size = (w, h)
+		c = 1   # divider factor
+		while resize_size[0] > dsize[0] and resize_size[1] > dsize[1]:
+			c += 0.1
+			resize_size = (int(w/c), int(h/c))
+			if resize_size[0] < dsize[0] or resize_size[1] < dsize[1]:  # in last iteration
+				c -= 0.1
+				resize_size = (int(w/c), int(h/c))
+				h, w = resize_size[1], resize_size[0]
+				break
+		im_resize = cv.resize(im, resize_size)
+
+		# rows n cols range for cropping
+		rows = (h//2-dsize[1]//2, h//2+dsize[1]//2)    # rows ~ height
+		cols = (w//2-dsize[0]//2, w//2+dsize[0]//2)    # cols ~ width
+		im_crop = im_resize[rows[0]:rows[1], cols[0]:cols[1]]
+
+		im_final = cv.rectangle(im_resize.copy(), pt1=(cols[0], rows[0]), pt2=(cols[1], rows[1]), color=(0,255,0), thickness=int(0.5/100*h))
+		im_final = cv.circle(im_final, (w//2, h//2), color=(0,255,0), radius=int(1/100*h), thickness=-1)
+
+		return im_crop
+	
+
+	def compress_calib_imgs2(self):
+		print('Compressing calibration images ...')
+		def do_func(dir):
+			for fname in os.listdir(dir):
+				print(f'\tGrayscaling {fname} ...', end=' ')
+				path = os.path.join(dir, fname)
+				# crop image if it is not in desired size
+				img = self.size_preconditioning(path, dsize=(1920,1080))
+				self.obj_imgs.update( {fname: img} )
+				print('Done')
+		do_func(self.calib_dir)
+		do_func(self.test_dir)
 
 
 	def get_calib_properties(self):
@@ -160,7 +207,9 @@ class CameraCalibrator():
 		print('Undistorting test image ...')
 		path = os.path.join( os.path.abspath(__file__), '../' , file_path )
 		print('\tReading test image ...', end=' ')
-		if file_path != '': img = cv.imread(path, cv.IMREAD_GRAYSCALE)      # test image
+		if file_path != '': 
+			img = cv.imread(path, cv.IMREAD_GRAYSCALE)      # test image
+			img = self.size_preconditioning(path, dsize=(1920,1080))
 		elif file_path == '': img = self.obj_imgs[ list(self.obj_imgs.keys())[-1] ]
 		h, w = img.shape
 		print('Done')
